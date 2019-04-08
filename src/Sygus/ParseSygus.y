@@ -40,6 +40,11 @@ import Sygus.LexSygus
     -- smt cmds
     declareDatatype     { TSymbol "declare-datatype" }
     declareDatatypes    { TSymbol "declare-datatypes" }
+    declareSort         { TSymbol "declare-sort" }
+    defineFun           { TSymbol "define-fun" }
+    defineSort          { TSymbol "define-sort" }
+    setLogic            { TSymbol "set-logic" }
+    setOption           { TSymbol "set-option" }
 
     -- gterm
     constant            { TSymbol "Constant" }
@@ -144,9 +149,13 @@ feature :: { Feature }
          | recursion  { Recursion }
 
 smtCmd :: { SmtCmd }
-        : '(' declareDatatype symb dt_dec ')' { DeclareDatatype $3 $4 }
+        : '(' declareDatatype symb dt_dec ')'                           { DeclareDatatype $3 $4 }
         | '(' declareDatatypes '(' sort_decls1 ')' '(' dt_decs1 ')' ')' { DeclareDatatypes $4 $7 }
-        -- TODO: ...
+        | '(' declareSort symb num ')'                                  { DeclareSort $3 $4 }
+        | '(' defineFun symb '(' sorted_vars ')' sort term ')'          { DefineFun $3 $5 $7 $8 }
+        | '(' defineSort symb sort ')'                                  { DefineSort $3 $4 }
+        | '(' setLogic symb ')'                                         { SetLogic $3 }
+        | '(' setOption ':' symb lit ')'                                { SetOption $4 $5 }
 
 sort_decls1 :: { [SortDecl] }
              : sort_decls_rev1 { reverse $1 }
@@ -256,6 +265,11 @@ data Feature = Grammars
 
 data SmtCmd = DeclareDatatype Symbol DTDec
             | DeclareDatatypes [SortDecl] [DTDec]
+            | DeclareSort Symbol Integer
+            | DefineFun Symbol [SortedVar] Sort Term
+            | DefineSort Symbol Sort
+            | SetLogic Symbol
+            | SetOption Symbol Lit
             deriving (Eq, Show, Read)
 
 data SortDecl = SortDecl Symbol Integer deriving (Eq, Show, Read)

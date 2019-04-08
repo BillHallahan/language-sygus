@@ -211,7 +211,7 @@ grouped_rule_lists1 :: { [GroupedRuleList] }
                     : grouped_rule_lists_rev1 { reverse $1 }
 
 grouped_rule_lists_rev1 :: { [GroupedRuleList] }
-                        : grouped_rule_lists1 grouped_rule_list { $2:$1 }
+                        : grouped_rule_lists_rev1 grouped_rule_list { $2:$1 }
                         | grouped_rule_list                     { [$1] }
 
 grouped_rule_list :: { GroupedRuleList }

@@ -226,5 +226,5 @@ gterm :: { GTerm }
 
 {
 parseError :: [Token] -> a
-parseError _ = error "Parse error."
+parseError l = error $ "Parse error." ++ show l
 }

@@ -37,6 +37,7 @@ data Token = TLit Lit
            | TCloseBracket
            | TColon
            | TSymbol String
+           deriving (Show, Read)
 
 lexSygus :: String -> [Token]
 lexSygus = alexScanTokens

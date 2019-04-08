@@ -9,8 +9,6 @@ import Data.Text (unpack)
 import Test.Tasty
 import Test.Tasty.HUnit
 
-import Debug.Trace
-
 main :: IO ()
 main = do
   pt <- parseTests
@@ -50,4 +48,4 @@ checkParsesAndPrints fp = do
 
     return $ testCase fp
               $ assertBool fp
-                (trace (show p1 ++ "\n" ++ show p2) p1 == p2)
+                (p1 == p2)

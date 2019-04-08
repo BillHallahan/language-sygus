@@ -14,8 +14,9 @@ main = do
 
 parseTests :: IO TestTree
 parseTests = return . testGroup "Tests" =<< mapM checkParses
-    [ "tests/sygus/constraint1.sl"
-    , "tests/sygus/constraint2.sl" ]
+    [ "tests/sygus/example1.sl"
+    , "tests/sygus/example2.sl"
+    , "tests/sygus/example3.sl" ]
 
 checkParses :: FilePath -> IO TestTree
 checkParses fp = do

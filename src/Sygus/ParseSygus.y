@@ -37,6 +37,10 @@ import Sygus.LexSygus
     synthFun            { TSymbol "synth-fun" }
     synthInv            { TSymbol "synth-inv" }
 
+    -- smt cmds
+    declareDatatype     { TSymbol "declare-datatype" }
+    declareDatatypes    { TSymbol "declare-datatypes" }
+
     -- gterm
     constant            { TSymbol "Constant" }
     variable            { TSymbol "Variable" }
@@ -50,9 +54,9 @@ cmd :: { Cmd }
      | '(' declareVar symb sort ')'                                 { DeclareVar $3 $4 }
      | '(' invConstraint symb symb symb symb ')'                    { InvConstraint $3 $4 $5 $6 }
      | '(' setFeature ':' feature bool ')'                          { SetFeature $4 $5 }
-     | '(' synthFun symb '(' sorted_vars ')' sort maybe_grammar_def { SynthFun $3 $5 $7 $8 } -- Gives a shift/reduce conflict
+     | '(' synthFun symb '(' sorted_vars ')' sort maybe_grammar_def { SynthFun $3 $5 $7 $8 }
      | '(' synthInv symb '(' sorted_vars ')' maybe_grammar_def      { SynthInv $3 $5 $7 }
-     -- TODO: ...
+     | smtCmd                                                       { SmtCmd $1 } 
 
 identifier :: { Identifier }
             : symb                      { ISymb $1 }
@@ -125,7 +129,7 @@ sorted_var :: { SortedVar }
             : '(' symb sort ')' { SortedVar $2 $3 }
 
 var_bindings1 :: { [VarBinding] }
-             : var_bindings_rev1 { reverse $1 }
+               : var_bindings_rev1 { reverse $1 }
 
 var_bindings_rev1 :: { [VarBinding] }
             : var_bindings_rev1 var_binding { $2:$1 }
@@ -139,6 +143,41 @@ feature :: { Feature }
          | fwdDecls   { FwdDecls }
          | recursion  { Recursion }
 
+smtCmd :: { SmtCmd }
+        : '(' declareDatatype symb dt_dec ')' { DeclareDatatype $3 $4 }
+        | '(' declareDatatypes '(' sort_decls1 ')' '(' dt_decs1 ')' ')' { DeclareDatatypes $4 $7 }
+        -- TODO: ...
+
+sort_decls1 :: { [SortDecl] }
+             : sort_decls_rev1 { reverse $1 }
+
+sort_decls_rev1 :: { [SortDecl] }
+                 : sort_decls_rev1 sort_decl   { $2:$1 }
+                 | sort_decl                   { [$1] }
+
+sort_decl :: { SortDecl }
+           : '(' symb num ')' { SortDecl $2 $3 }
+
+dt_decs1 :: { [DTDec] }
+          : dt_decs_rev1 { reverse $1 }
+
+dt_decs_rev1 :: { [DTDec] }
+              : dt_decs_rev1 dt_dec { $2:$1 }
+              | dt_dec              { [$1] }
+
+dt_dec :: { DTDec }
+        : '(' dt_cons_decs1 ')' { DTDec $2 }
+
+dt_cons_decs1 :: { [DTConsDec] }
+               : dt_cons_decs_rev1 { reverse $1 }
+
+dt_cons_decs_rev1 :: { [DTConsDec] }
+                   : dt_cons_decs_rev1 dt_cons_dec { $2:$1 }
+                   | dt_cons_dec                   { [$1] }
+
+dt_cons_dec :: { DTConsDec }
+             : '(' symb sorted_vars ')' { DTConsDec $2 $3 }
+
 maybe_grammar_def :: { Maybe GrammarDef }
                    : grammar_def { Just $1 }
                    | {- empty -} { Nothing }
@@ -147,7 +186,7 @@ grammar_def :: { GrammarDef }
              : '(' sorted_vars1 ')' '(' grouped_rule_lists1 ')' { GrammarDef $2 $5 }
 
 grouped_rule_lists1 :: { [GroupedRuleList] }
-                    : grouped_rule_lists1 { reverse $1 }
+                    : grouped_rule_lists_rev1 { reverse $1 }
 
 grouped_rule_lists_rev1 :: { [GroupedRuleList] }
                         : grouped_rule_lists1 grouped_rule_list { $2:$1 }
@@ -178,6 +217,7 @@ data Cmd = CheckSynth
          | SetFeature Feature Bool
          | SynthFun Symbol [SortedVar] Sort (Maybe GrammarDef)
          | SynthInv Symbol [SortedVar] (Maybe GrammarDef)
+         | SmtCmd SmtCmd
          deriving (Eq, Show, Read)
 
 data Identifier = ISymb Symbol
@@ -213,6 +253,16 @@ data Feature = Grammars
              | FwdDecls
              | Recursion
              deriving (Eq, Show, Read)
+
+data SmtCmd = DeclareDatatype Symbol DTDec
+            | DeclareDatatypes [SortDecl] [DTDec]
+            deriving (Eq, Show, Read)
+
+data SortDecl = SortDecl Symbol Integer deriving (Eq, Show, Read)
+
+data DTDec = DTDec [DTConsDec] deriving (Eq, Show, Read)
+
+data DTConsDec = DTConsDec Symbol [SortedVar] deriving (Eq, Show, Read)
 
 data GrammarDef = GrammarDef [SortedVar] [GroupedRuleList] deriving (Eq, Show, Read)
 

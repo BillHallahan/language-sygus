@@ -53,15 +53,22 @@ import Sygus.LexSygus
     symb                { TSymbol $$ }
 %%
 
+sygus :: { [Cmd] }
+       : sygus_rev { reverse $1 }
+
+sygus_rev :: { [Cmd] }
+           : sygus_rev cmd { $2:$1 }
+           | {- empty -}   { [] }
+
 cmd :: { Cmd }
-     : '(' checkSynth ')'                                           { CheckSynth }
-     | '(' constraint term ')'                                      { Constraint $3 }
-     | '(' declareVar symb sort ')'                                 { DeclareVar $3 $4 }
-     | '(' invConstraint symb symb symb symb ')'                    { InvConstraint $3 $4 $5 $6 }
-     | '(' setFeature ':' feature bool ')'                          { SetFeature $4 $5 }
-     | '(' synthFun symb '(' sorted_vars ')' sort maybe_grammar_def { SynthFun $3 $5 $7 $8 }
-     | '(' synthInv symb '(' sorted_vars ')' maybe_grammar_def      { SynthInv $3 $5 $7 }
-     | smtCmd                                                       { SmtCmd $1 } 
+     : '(' checkSynth ')'                                               { CheckSynth }
+     | '(' constraint term ')'                                          { Constraint $3 }
+     | '(' declareVar symb sort ')'                                     { DeclareVar $3 $4 }
+     | '(' invConstraint symb symb symb symb ')'                        { InvConstraint $3 $4 $5 $6 }
+     | '(' setFeature ':' feature bool ')'                              { SetFeature $4 $5 }
+     | '(' synthFun symb '(' sorted_vars ')' sort maybe_grammar_def ')' { SynthFun $3 $5 $7 $8 }
+     | '(' synthInv symb '(' sorted_vars ')' maybe_grammar_def  ')'     { SynthInv $3 $5 $7 }
+     | smtCmd                                                           { SmtCmd $1 } 
 
 identifier :: { Identifier }
             : symb                      { ISymb $1 }

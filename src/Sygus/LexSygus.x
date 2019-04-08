@@ -2,6 +2,9 @@
 module Sygus.LexSygus ( Token (..) 
                       , Lit (..)
                       , lexSygus ) where
+
+import Sygus.Syntax
+
 }
 
 %wrapper "basic"
@@ -34,13 +37,6 @@ data Token = TLit Lit
            | TCloseBracket
            | TColon
            | TSymbol String
-
-data Lit = LitNum Integer 
-         | LitDec String
-         | LitBool Bool
-         | Hexidecimal String
-         | Binary String
-         | LitStr String deriving (Eq, Show, Read)
 
 lexSygus :: String -> [Token]
 lexSygus = alexScanTokens

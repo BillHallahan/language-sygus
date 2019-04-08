@@ -17,7 +17,8 @@ cabal-version:       >=1.10
 
 library
   exposed-modules:       Sygus.LexSygus 
-                       , Sygus.ParseSygus    
+                       , Sygus.ParseSygus
+                       , Sygus.Syntax
   -- other-modules:       
   -- other-extensions:    
   build-depends:         array

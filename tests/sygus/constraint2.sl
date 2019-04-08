@@ -1,0 +1,1 @@
+(constraint (= (f 40) 4))

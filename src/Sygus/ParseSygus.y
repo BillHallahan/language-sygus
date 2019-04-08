@@ -13,7 +13,7 @@ import Sygus.Syntax
 %token
     num                 { TLit (LitNum $$) }
     bool                { TLit (LitBool $$) }
-    lit                 { TLit $$ }
+    other_lit           { TLit $$ }
     '_'                 { TUnderscore }
     '('                 { TOpenBracket }
     ')'                 { TCloseBracket }
@@ -70,6 +70,11 @@ cmd :: { Cmd }
      | '(' synthFun symb '(' sorted_vars ')' sort maybe_grammar_def ')' { SynthFun $3 $5 $7 $8 }
      | '(' synthInv symb '(' sorted_vars ')' maybe_grammar_def  ')'     { SynthInv $3 $5 $7 }
      | smtCmd                                                           { SmtCmd $1 } 
+
+lit :: { Lit }
+     : num       { LitNum $1 }
+     | bool      { LitBool $1}
+     | other_lit { $1 }
 
 identifier :: { Identifier }
             : symb                      { ISymb $1 }

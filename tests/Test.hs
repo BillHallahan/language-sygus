@@ -13,7 +13,9 @@ main = do
   defaultMain $ testGroup "all" [ pt ]
 
 parseTests :: IO TestTree
-parseTests = return . testGroup "Tests" =<< sequence [ checkParses "tests/sygus/constraint1.sl" ]
+parseTests = return . testGroup "Tests" =<< mapM checkParses
+    [ "tests/sygus/constraint1.sl"
+    , "tests/sygus/constraint2.sl" ]
 
 checkParses :: FilePath -> IO TestTree
 checkParses fp = do

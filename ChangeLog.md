@@ -1,4 +1,4 @@
-# Revision history for sygus
+# Revision history for language-sygus
 
 ## 0.1.0.0  -- YYYY-mm-dd
 

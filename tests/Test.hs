@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Main where
 
 import Sygus.LexSygus
@@ -13,14 +15,18 @@ main :: IO ()
 main = do
   pt <- parseTests
   pr <- parseAndPrintsTests
-  defaultMain $ testGroup "all" [ pt, pr ]
+  defaultMain $ testGroup "all" [ pt, pr, printTests ]
 
 parseTests :: IO TestTree
-parseTests = return . testGroup "Tests" =<< mapM checkParses files
+parseTests = return . testGroup "Parse" =<< mapM checkParses files
 
 parseAndPrintsTests :: IO TestTree
 parseAndPrintsTests =
-    return . testGroup "Tests" =<< mapM checkParsesAndPrints files
+    return . testGroup "Parse and print" =<< mapM checkParsesAndPrints files
+
+printTests :: TestTree
+printTests =
+    testGroup "Print" [printTest1]
 
 files :: [FilePath]
 files =
@@ -49,3 +55,7 @@ checkParsesAndPrints fp = do
     return $ testCase fp
               $ assertBool fp
                 (p1 == p2)
+
+printTest1 :: TestTree
+printTest1 = testCase "Negative Number"
+              $ assertBool "Negative Number" (printSygus (LitNum (-1)) == "- 1")

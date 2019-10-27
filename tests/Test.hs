@@ -58,4 +58,4 @@ checkParsesAndPrints fp = do
 
 printTest1 :: TestTree
 printTest1 = testCase "Negative Number"
-              $ assertBool "Negative Number" (printSygus (LitNum (-1)) == "- 1")
+              $ assertBool "Negative Number" (printSygus (LitNum (-1)) == "(- 1)")

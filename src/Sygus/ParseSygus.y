@@ -2,6 +2,8 @@
 module Sygus.ParseSygus ( module Sygus.Syntax 
                         , parse
                         , parseCmd
+                        , parseIndex
+                        , parseBfTerm
                         , parseSortedVars
                         , parseSortedVars1
                         , parseSort
@@ -14,6 +16,8 @@ import Sygus.Syntax
 
 %name parse sygus
 %name parseCmd cmd
+%name parseIndex index
+%name parseBfTerm bfterm
 %name parseSortedVars sorted_vars
 %name parseSortedVars1 sorted_vars1
 %name parseSort sort

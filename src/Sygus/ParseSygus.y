@@ -1,12 +1,25 @@
 {
 module Sygus.ParseSygus ( module Sygus.Syntax 
-                        , parse ) where
+                        , parse
+                        , parseCmd
+                        , parseSortedVars
+                        , parseSortedVars1
+                        , parseSort
+                        , parseMaybeGrammarDef
+                        , parseGroupedRuleLists1 ) where
 
 import Sygus.LexSygus
 import Sygus.Syntax
 }
 
-%name parse
+%name parse sygus
+%name parseCmd cmd
+%name parseSortedVars sorted_vars
+%name parseSortedVars1 sorted_vars1
+%name parseSort sort
+%name parseMaybeGrammarDef maybe_grammar_def
+%name parseGroupedRuleLists1 grouped_rule_lists1
+
 %tokentype { Token }
 %error { parseError }
 
@@ -225,8 +238,8 @@ gterm_rev1 :: { [GTerm] }
             | gterm            { [$1] }
 
 gterm :: { GTerm }
-       : constant sort { GConstant $2 }
-       | variable sort { GVariable $2 }
+       : '(' constant sort ')' { GConstant $3 }
+       | '(' variable sort ')' { GVariable $3 }
        | bfterm        { GBfTerm $1 }
 
 {

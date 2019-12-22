@@ -35,7 +35,8 @@ files =
     , "tests/sygus/example3.sl"
     , "tests/sygus/example4.sl"
     , "tests/sygus/example5.sl"
-    , "tests/sygus/example6.sl" ]
+    , "tests/sygus/example6.sl"
+    , "tests/sygus/example7.sl" ]
 
 checkParses :: FilePath -> IO TestTree
 checkParses fp = do

@@ -6,7 +6,7 @@ import Data.Hashable
 import GHC.Generics (Generic)
 
 data Lit = LitNum Integer 
-         | LitDec String
+         | LitDec Integer Integer
          | LitBool Bool
          | Hexidecimal String
          | Binary String

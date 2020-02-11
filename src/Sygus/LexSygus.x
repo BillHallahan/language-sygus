@@ -15,7 +15,7 @@ $symbs = [\_ \+ \- \* \& \| \! \~ \< \> \= \/ \% \? \. \$ \^]
 
 tokens:-
     $white+                                 ;
-    $digit+'.'$digit                        { TLit . LitDec }
+    $digit+'.'$digit                        { TLit. parseDec }
     $digit+                                 { TLit . LitNum . read }
     true                                    { TLit . const (LitBool True) }
     false                                   { TLit . const (LitBool False) }
@@ -50,5 +50,12 @@ elimOpenCloseQuote' :: String -> String
 elimOpenCloseQuote' ('"':[]) = []
 elimOpenCloseQuote' (x:xs) = x:elimOpenCloseQuote' xs
 elimOpenCloseQuote' [] = error "elimOpenCloseQuote': Bad string"
+
+parseDec :: String -> Lit
+parseDec s =
+  let
+      (n, _:d) = break (== '.') s
+  in
+  LitDec (read n) (read d)
 
 }

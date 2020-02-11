@@ -16,7 +16,7 @@ instance PrintSygus Lit where
     printSygus (LitNum i)
         | i >= 0 = pack $ show i
         | otherwise = pack $ "(- " ++ show (abs i) ++ ")"
-    printSygus (LitDec s) = pack s
+    printSygus (LitDec n d) = pack (show n ++ "." ++ show d) 
     printSygus (LitBool b) = printSygus b
     printSygus (Hexidecimal s) = pack s
     printSygus (Binary s) = pack s

@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                language-sygus
-version:             0.1.1.2
+version:             0.1.1.3
 synopsis:            A parser and printer for the SyGuS 2.0 language.   
 description:         A parser and printer for the SyGuS 2.0 language.  <https://sygus.org/assets/pdf/SyGuS-IF_2.0.pdf>
 license:             BSD3

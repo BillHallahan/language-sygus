@@ -38,7 +38,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cabal install --only-dependencies
+        cabal install --only-dependencies --lib
         cabal build
     - name: Build
       run: cabal build

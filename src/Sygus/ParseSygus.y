@@ -60,6 +60,7 @@ import Sygus.Syntax
     declareDatatypes    { TSymbol "declare-datatypes" }
     declareSort         { TSymbol "declare-sort" }
     defineFun           { TSymbol "define-fun" }
+    defineFunRec        { TSymbol "define-fun-rec" }
     defineSort          { TSymbol "define-sort" }
     setLogic            { TSymbol "set-logic" }
     setOption           { TSymbol "set-option" }
@@ -183,6 +184,7 @@ smtCmd :: { SmtCmd }
         | '(' declareDatatypes '(' sort_decls1 ')' '(' dt_decs1 ')' ')' { DeclareDatatypes $4 $7 }
         | '(' declareSort symb num ')'                                  { DeclareSort $3 $4 }
         | '(' defineFun symb '(' sorted_vars ')' sort term ')'          { DefineFun $3 $5 $7 $8 }
+        | '(' defineFunRec symb '(' sorted_vars ')' sort term ')'       { DefineFunRec $3 $5 $7 $8 }
         | '(' defineSort symb sort ')'                                  { DefineSort $3 $4 }
         | '(' setLogic symb ')'                                         { SetLogic $3 }
         | '(' setOption ':' symb lit ')'                                { SetOption $4 $5 }

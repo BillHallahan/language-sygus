@@ -82,6 +82,7 @@ data SmtCmd = DeclareDatatype Symbol DTDec
             | DeclareDatatypes [SortDecl] [DTDec]
             | DeclareSort Symbol Integer
             | DefineFun Symbol [SortedVar] Sort Term
+            | DefineFunRec Symbol [SortedVar] Sort Term
             | DefineSort Symbol Sort
             | SetLogic Symbol
             | SetOption Symbol Lit

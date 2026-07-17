@@ -99,6 +99,9 @@ instance PrintSygus SmtCmd where
     printSygus (DefineFun symb sv s t) =
         "(define-fun " <> printSygus symb <> " (" <> printSygusList sv <> ") "
             <> printSygus s <> " " <> printSygus t <> ")"
+    printSygus (DefineFunRec symb sv s t) =
+        "(define-fun-rec " <> printSygus symb <> " (" <> printSygusList sv <> ") "
+            <> printSygus s <> " " <> printSygus t <> ")"
     printSygus (DefineSort symb s) =
         "(define-sort " <> printSygus symb <> " " <> printSygus s <> ")"
     printSygus (SetLogic l) = "(set-logic " <> printSygus l <> ")"
